@@ -19,7 +19,7 @@ class PlacesViewModel: ViewModel() {
     // Duplicate loop check
         for (placeName in placeNames) {
             if (placeName.uppercase() == place.uppercase()) {
-                return - 1          // -1 indicates a place was not added
+                return - 1          // -1 indicates no position, position not found
             }
         }
  */
