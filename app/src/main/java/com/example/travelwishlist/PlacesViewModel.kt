@@ -5,20 +5,22 @@ import androidx.lifecycle.ViewModel
 class PlacesViewModel: ViewModel() {
 
     // Private to prevent duplicate placenames
-    private val placeNames = mutableListOf<String>("Brainerd", "Custer", "Minneapolis", "Mystic")
+    private val places = mutableListOf<Place>(
+        Place("Brainerd, MN"), Place("Custer, SD"), Place("Minneapolis, MN"),
+          Place("Mystic, SD"), Place( "Melbourne, AU"))
 
     // function to access the list
-    fun getPlaces(): List<String> {
-        return placeNames           // Smart cast to convert mutable list to list
+    fun getPlaces(): List<Place> {
+        return places           // Smart cast to convert mutable list to list
     }
 
-    fun addNewPlace(place: String, position: Int? = null): Int {         // Nullable Integer = ?
+    fun addNewPlace(place: Place, position: Int? = null): Int {         // Nullable Integer = ?
 
         // Avoid duplicates
 /*
     // Duplicate loop check
         for (placeName in placeNames) {
-            if (placeName.uppercase() == place.uppercase()) {
+            if (placeName.name.uppercase() == place.name.uppercase()) {
                 return - 1          // -1 indicates no position, position not found
             }
         }
@@ -26,16 +28,16 @@ class PlacesViewModel: ViewModel() {
         // Kotlin list function "any" or "all"
             // 'all' returns true if all of the list items meet this condition
             // 'any' returns true if any of the placeName list items meet this condition
-        if(placeNames.any { placeName -> placeName.uppercase() == place.uppercase() } ) {
+        if(places.any { placeName -> placeName.name.uppercase() == place.name.uppercase() } ) {
             return -1       // Indicates 'not added'
         }
         // Implement add at position
         return if (position == null) {      // If no position is given
             // return location in the list that the new item was added
-            placeNames.add(place)       // Basic version adds to the end of the list
-            placeNames.lastIndex
+            places.add(place)       // Basic version adds to the end of the list
+            places.lastIndex
         } else {
-            placeNames.add(position, place)
+            places.add(position, place)
             position
         }
 

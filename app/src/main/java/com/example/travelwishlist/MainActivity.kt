@@ -1,6 +1,8 @@
 package com.example.travelwishlist
 
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.inputmethod.InputMethodManager
@@ -11,8 +13,9 @@ import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import java.net.URI
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(),OnListItemClickedListener {
 
     private lateinit var newPlaceEditText: EditText
     private lateinit var addNewPlaceButton: Button
@@ -34,10 +37,10 @@ class MainActivity : AppCompatActivity() {
         newPlaceEditText = findViewById(R.id.new_place_name)
 
         // Asking ViewModel for a list of places
-        val places = placesViewModel.getPlaces()
+        val places = placesViewModel.getPlaces()        // List of place objects
 
         // Setting up the RecyclerView. Data is from places list in PlacesRecyclerAdapter.kt
-        placesRecyclerAdapter = PlaceRecyclerAdapter(places)
+        placesRecyclerAdapter = PlaceRecyclerAdapter(places, this)
         // View Component
         placeListRecyclerView.layoutManager = LinearLayoutManager(this)
         placeListRecyclerView.adapter = placesRecyclerAdapter
@@ -53,8 +56,9 @@ class MainActivity : AppCompatActivity() {
         if (name.isEmpty()) {
             Toast.makeText(this, "Enter a place name", Toast.LENGTH_SHORT).show()
         } else {
+            val newPlace = Place(name)
             // Modifies the placesViewModel with new data
-            val positionAdded = placesViewModel.addNewPlace(name)
+            val positionAdded = placesViewModel.addNewPlace(newPlace)
 
 // Checking if position was added in PlacesViewModel.kt
             if (positionAdded == -1) {
@@ -80,5 +84,12 @@ class MainActivity : AppCompatActivity() {
         // imm = "Input Method Manager"
            imm?.hideSoftInputFromWindow(view.windowToken, 0)
         }
+    }
+
+    override fun onListItemClicked(place: Place) {
+        Toast.makeText(this, "${place.name} map icon was clicked", Toast.LENGTH_SHORT).show()
+        val placeLocationUri = Uri.parse("geo:0,0?q=${place.name}")
+        val mapIntent = Intent(Intent.ACTION_VIEW, placeLocationUri)
+        startActivity(mapIntent)
     }
 }

@@ -2,21 +2,43 @@
 
 package com.example.travelwishlist
 
+import android.provider.ContactsContract.CommonDataKinds.Im
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
+// Interface
+interface OnListItemClickedListener {
+    fun onListItemClicked(place: Place)
+}
+
 // Constructor
-class PlaceRecyclerAdapter(private val places: List<String>):
+class PlaceRecyclerAdapter(private val places: List<Place>,
+                           private val onListItemClickedListener: OnListItemClickedListener):
     RecyclerView.Adapter<PlaceRecyclerAdapter.ViewHolder>() {
 
     // Manages one view - one list item- sets the actual data in the view
-    class ViewHolder(private val view: View): RecyclerView.ViewHolder(view) {
-        fun bind(place: String) {
+        // Nested classes
+        // Inner classes - can access data
+    inner class ViewHolder(private val view: View): RecyclerView.ViewHolder(view) {
+        fun bind(place: Place) {
+            // setting the name of the Place
             val placeNameTextView = view.findViewById<TextView>(R.id.place_name)
-            placeNameTextView.text = place
+            val createdOnText = view.context.getString(R.string.created_on, place.formattedDate())
+            placeNameTextView.text = place.name
+
+            // Setting the date of the Place
+            val dateCreatedOnTextView: TextView = view.findViewById(R.id.date_place_added)
+            dateCreatedOnTextView.text = createdOnText
+
+            // Finding the map icon and setting it's listener
+            val mapIcon: ImageView = view.findViewById(R.id.map_icon)
+            mapIcon.setOnClickListener {
+                onListItemClickedListener.onListItemClicked(place)
+            }
         }
     }
     // Create a ViewHolder for a specific position? (combo view + data
