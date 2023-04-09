@@ -14,6 +14,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.snackbar.Snackbar
 import java.net.URI
 
 class MainActivity : AppCompatActivity(),OnListItemClickedListener, OnDataChangedListener {
@@ -91,7 +92,10 @@ class MainActivity : AppCompatActivity(),OnListItemClickedListener, OnDataChange
     }
 
     override fun onListItemClicked(place: Place) {
-        Toast.makeText(this, "${place.name} map icon was clicked", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, "${place.name} map icon was clicked",
+            // Alternative: add as milliseconds
+            // 5000             // Uncomment to use
+            Toast.LENGTH_SHORT).show()      // Comment out this line to test milliseconds version
         val placeLocationUri = Uri.parse("geo:0,0?q=${place.name}")
         val mapIntent = Intent(Intent.ACTION_VIEW, placeLocationUri)
         startActivity(mapIntent)
@@ -105,6 +109,20 @@ class MainActivity : AppCompatActivity(),OnListItemClickedListener, OnDataChange
     }
 
     override fun onListItemDeleted(position: Int) {
-        TODO("Not yet implemented")
+        val deletedPLace = placesViewModel.deletePLace(position)
+        placesRecyclerAdapter.notifyItemRemoved(position)
+
+        Snackbar.make(findViewById(R.id.wishlist_container),
+            "${deletedPLace.name} deleted", Snackbar.LENGTH_LONG)
+            .setActionTextColor(resources.getColor(R.color.warning_red))
+            .setBackgroundTint(resources.getColor(R.color.dark_grey))
+            .setAction(getString(R.string.undo)) {          // Action to display an "UNDO"
+                placesViewModel.addNewPlace(deletedPLace,position)
+       // Since the Recycler has been informed of the removal of a "Place",
+                // we have to inform the Recycler to insert a "PLace" by position
+                placesRecyclerAdapter.notifyItemInserted(position)
+            }
+            .show()
+
     }
 }

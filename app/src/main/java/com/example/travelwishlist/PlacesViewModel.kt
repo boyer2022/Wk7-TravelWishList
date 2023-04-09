@@ -53,4 +53,8 @@ class PlacesViewModel: ViewModel() {
         // Log statement to verify move
         Log.d(TAG, places.toString())
     }
+
+    fun deletePLace(position: Int): Place {
+       return places.removeAt(position)
+    }
 }

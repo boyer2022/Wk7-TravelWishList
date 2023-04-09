@@ -12,7 +12,8 @@ interface OnDataChangedListener {
 class OnListItemSwipeListener(private val onDataChangedListener: OnDataChangedListener):
     ItemTouchHelper.SimpleCallback(
     // Drag directions
-    ItemTouchHelper.UP or ItemTouchHelper.DOWN, ItemTouchHelper.RIGHT
+    ItemTouchHelper.UP or ItemTouchHelper.DOWN,         // To Reorder
+        ItemTouchHelper.LEFT                                    // To Delete
 ) {
     // For Moving Up/Down
     override fun onMove(
@@ -28,6 +29,8 @@ class OnListItemSwipeListener(private val onDataChangedListener: OnDataChangedLi
 
     // Swiping Left/Right
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-        TODO("Not yet implemented")
+        if (direction == ItemTouchHelper.LEFT) {
+            onDataChangedListener.onListItemDeleted(viewHolder.adapterPosition)
+        }
     }
 }

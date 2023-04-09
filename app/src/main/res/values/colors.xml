@@ -9,4 +9,5 @@
     <color name="white">#FFFFFFFF</color>
     <color name="list_item_background">#84C6C0</color>
     <color name="dark_grey">#111111</color>
+    <color name="warning_red">#FF0000</color>
 </resources>
