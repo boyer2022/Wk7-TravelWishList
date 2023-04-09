@@ -1,7 +1,9 @@
 package com.example.travelwishlist
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 
+const val TAG = "PLACES_VIEW_MODEL"
 class PlacesViewModel: ViewModel() {
 
     // Private to prevent duplicate placenames
@@ -43,5 +45,12 @@ class PlacesViewModel: ViewModel() {
 
 
 
+    }
+
+    fun movePlace(from: Int, to: Int) {
+        val place = places.removeAt(from)
+        places.add(to, place)
+        // Log statement to verify move
+        Log.d(TAG, places.toString())
     }
 }

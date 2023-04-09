@@ -11,11 +11,12 @@ import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import java.net.URI
 
-class MainActivity : AppCompatActivity(),OnListItemClickedListener {
+class MainActivity : AppCompatActivity(),OnListItemClickedListener, OnDataChangedListener {
 
     private lateinit var newPlaceEditText: EditText
     private lateinit var addNewPlaceButton: Button
@@ -44,6 +45,9 @@ class MainActivity : AppCompatActivity(),OnListItemClickedListener {
         // View Component
         placeListRecyclerView.layoutManager = LinearLayoutManager(this)
         placeListRecyclerView.adapter = placesRecyclerAdapter
+
+        val itemSwipeListener = OnListItemSwipeListener(this)
+        ItemTouchHelper(itemSwipeListener).attachToRecyclerView(placeListRecyclerView)
 
         addNewPlaceButton.setOnClickListener {
             addNewPlace()
@@ -91,5 +95,16 @@ class MainActivity : AppCompatActivity(),OnListItemClickedListener {
         val placeLocationUri = Uri.parse("geo:0,0?q=${place.name}")
         val mapIntent = Intent(Intent.ACTION_VIEW, placeLocationUri)
         startActivity(mapIntent)
+    }
+
+    override fun onListItemMoved(from: Int, to: Int) {
+        // Call to placesViewModel
+        placesViewModel.movePlace(from, to)
+        // Tell adapter the data source has changed
+        placesRecyclerAdapter.notifyItemMoved(from, to)
+    }
+
+    override fun onListItemDeleted(position: Int) {
+        TODO("Not yet implemented")
     }
 }

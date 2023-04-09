@@ -9,4 +9,9 @@ class Place(val name: String, val dateAdded: Date = Date()) {
         // Date formatter patterns:  https://docs.oracle.com/javase/10/docs/api/java/text/SimpleDateFormat.html
         return SimpleDateFormat("EEE, d MMM yyyy", Locale.getDefault()).format(dateAdded)
     }
+
+    // Formatted Log string to indicate readable placements of Places
+    override fun toString(): String {
+        return "$name ${formattedDate()}"
+    }
 }
