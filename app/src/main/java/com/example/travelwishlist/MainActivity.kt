@@ -113,7 +113,7 @@ class MainActivity : AppCompatActivity(),OnListItemClickedListener, OnDataChange
         placesRecyclerAdapter.notifyItemRemoved(position)
 
         Snackbar.make(findViewById(R.id.wishlist_container),
-            "${deletedPLace.name} deleted", Snackbar.LENGTH_LONG)
+            getString(R.string.place_deleted, deletedPLace.name) , Snackbar.LENGTH_LONG)
             .setActionTextColor(resources.getColor(R.color.warning_red))
             .setBackgroundTint(resources.getColor(R.color.dark_grey))
             .setAction(getString(R.string.undo)) {          // Action to display an "UNDO"
