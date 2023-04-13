@@ -20,6 +20,7 @@ import java.net.URI
 class MainActivity : AppCompatActivity(),OnListItemClickedListener, OnDataChangedListener {
 
     private lateinit var newPlaceEditText: EditText
+    private lateinit var newReasonEditText: EditText
     private lateinit var addNewPlaceButton: Button
     // RecyclerView
     private lateinit var placeListRecyclerView: RecyclerView
@@ -37,6 +38,7 @@ class MainActivity : AppCompatActivity(),OnListItemClickedListener, OnDataChange
         placeListRecyclerView = findViewById(R.id.place_list)
         addNewPlaceButton = findViewById(R.id.add_new_place_button)
         newPlaceEditText = findViewById(R.id.new_place_name)
+        newReasonEditText = findViewById(R.id.reason_why)
 
         // Asking ViewModel for a list of places
         val places = placesViewModel.getPlaces()        // List of place objects
@@ -58,10 +60,14 @@ class MainActivity : AppCompatActivity(),OnListItemClickedListener, OnDataChange
     private fun addNewPlace() {
         // Reads the data from the editText and adding it to the list
         val name = newPlaceEditText.text.toString().trim()
+        val reason = newReasonEditText.text.toString().trim()
         if (name.isEmpty()) {
             Toast.makeText(this, "Enter a place name", Toast.LENGTH_SHORT).show()
+        } else if (reason.isEmpty()) {
+            Toast.makeText(this, "Please enter a reason", Toast.LENGTH_SHORT).show()
         } else {
-            val newPlace = Place(name)
+            val newPlace = Place(name, reason)
+//            val newReason = Place(reason)
             // Modifies the placesViewModel with new data
             val positionAdded = placesViewModel.addNewPlace(newPlace)
 
@@ -79,8 +85,12 @@ class MainActivity : AppCompatActivity(),OnListItemClickedListener, OnDataChange
         }
     }
 
+    // Called to clear each text field when add button is pressed
     private fun clearForm() {
+        // Clears place to visit text field
         newPlaceEditText.text.clear()
+        // Clears reason to visit text field
+        newReasonEditText.text.clear()
     }
 
     private fun hideKeyBoard() {

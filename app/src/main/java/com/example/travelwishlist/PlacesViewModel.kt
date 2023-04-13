@@ -8,8 +8,11 @@ class PlacesViewModel: ViewModel() {
 
     // Private to prevent duplicate placenames
     private val places = mutableListOf<Place>(
-        Place("Brainerd, MN"), Place("Custer, SD"), Place("Minneapolis, MN"),
-          Place("Mystic, SD"), Place( "Melbourne, AU"))
+        Place("Brainerd, MN", "Why go here?"),
+        Place("Custer, SD", "Why go here?"),
+        Place("Minneapolis, MN", "Why go here?"),
+        Place("Mystic, SD", "Why go here?"),
+        Place( "Melbourne, AU", "Why go here?"))
 
     // function to access the list
     fun getPlaces(): List<Place> {
@@ -42,9 +45,6 @@ class PlacesViewModel: ViewModel() {
             places.add(position, place)
             position
         }
-
-
-
     }
 
     fun movePlace(from: Int, to: Int) {
@@ -53,7 +53,6 @@ class PlacesViewModel: ViewModel() {
         // Log statement to verify move
         Log.d(TAG, places.toString())
     }
-
     fun deletePLace(position: Int): Place {
        return places.removeAt(position)
     }
